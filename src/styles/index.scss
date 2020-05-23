@@ -1,3 +1,72 @@
-/* 
-    General Styles
-*/
+@import "~bootstrap/scss/bootstrap.scss";
+
+input{
+    font-size: 30px;
+    width: 100%;
+    height: 4rem;
+    border: 1px solid #dee2e6;
+    padding-left: 40px;
+    color: #757575;
+}
+input::placeholder{
+      color: #757575;
+}
+#app{
+    display: flex;
+    justify-content: center;
+}
+h1{
+    text-align: center;
+    font-size: 10rem;
+    color: #dab7b7;
+}
+.main{
+    width: 70%;
+}
+ul{
+    list-style: none;
+    padding: 0;
+}
+li{
+    font-size: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    padding: 10px 40px;
+    color: #757575;
+}
+li:last-child {
+  background-color: white !important;
+}
+li:nth-child(even) {
+  background-color: white;
+}
+li:nth-child(odd) {
+  background-color: #dab7b7;
+}
+.taskCounter {
+  height: 30px;
+  font-size: 18px;
+  padding-left: 15px;
+   box-shadow:
+    0 1px 1px rgba(0,0,0,0.15),
+    0 10px 0 -5px white,
+    0 10px 1px -4px rgba(0,0,0,0.15),
+    0 20px 0 -10px white,
+    0 20px 1px -9px rgba(0,0,0,0.15);    
+  padding: 30px;
+}
+.delLi{
+    color: red;
+    border: none;
+    background-color: none;
+    width: 20px;
+    height: 20px;   
+    display: none; 
+}
+.todos:hover .delLi{
+  display: block;
+}
