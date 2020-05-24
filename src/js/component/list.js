@@ -5,6 +5,7 @@ const List = ({ lista, onDeleteClicked, counter }) => {
 	const listaa = lista.map((elemento, index) => {
 		return (
 			<li className="todos" key={index}>
+				{console.log()}
 				{elemento.label}
 				<i className="delLi fa fa-times" onClick={() => onDeleteClicked(index)} />
 			</li>

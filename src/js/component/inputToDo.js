@@ -16,18 +16,14 @@ export class InputToDo extends React.Component {
 				<input
 					type="text"
 					placeholder="What need to be done?"
-					onChange={e => this.setState({ todoinput: e.target.value })}
 					onKeyPress={this.addToList}
+					onChange={e => this.setState({ todoinput: e.target.value })}
 				/>
 				{this.state.lista ? (
 					<List
 						lista={this.state.lista}
 						counter={this.taskCounter(this.state.lista.length)}
-						onDeleteClicked={index =>
-							this.setState({
-								lista: this.state.lista.filter((item, pos) => pos !== index)
-							})
-						}
+						onDeleteClicked={this.deleteFromList}
 					/>
 				) : (
 					"loading..."
@@ -36,21 +32,43 @@ export class InputToDo extends React.Component {
 		);
 	}
 	componentDidMount() {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzi")
-			.then(response => response.json())
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh")
+			.then(response => response.json(), console.log("succes"))
 			.then(data => {
-				this.setState([...this.state.lista, data]);
+				for (let z in data) {
+					this.setState({ lista: [...this.state.lista, data[z]] });
+				}
 			});
+	}
+
+	updateList(x) {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
+			method: "PUT",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify([...this.state.lista, x])
+		}).then(response => response.json());
 	}
 
 	addToList = e => {
 		if (e.key === "Enter") {
 			if (e.target.value.split(" ").join("").length > 0) {
-				this.setState({ lista: e.target.value });
+				this.setState({ lista: [...this.state.lista, { label: e.target.value, done: false }] });
 			}
+			this.updateList({ label: e.target.value, done: false });
 			e.target.value = "";
 		}
 	};
+	deleteFromList = index => {
+		this.setState({
+			lista: this.state.lista.filter((item, pos) => pos !== index)
+		});
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
+			method: "PUT",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify([...this.state.lista])
+		}).then(response => response.json());
+	};
+
 	taskCounter = leng => {
 		if (leng === 0) {
 			return <li className="taskCounter text-muted">No tasks, add a task</li>;
