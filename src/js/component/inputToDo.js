@@ -38,8 +38,7 @@ export class InputToDo extends React.Component {
 	componentDidUpdate() {
 		if (this.state.lista.length === 0) {
 			fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
-				method: "POST",
-				headers: { "content-type": "application/json" },
+				method: "PUT",
 				body: []
 			}).then(response => response.json());
 		} else {
@@ -50,6 +49,7 @@ export class InputToDo extends React.Component {
 			}).then(response => response.json());
 		}
 		console.log(this.state.lista.length);
+		console.log(this.state.lista);
 	}
 	addToList = e => {
 		if (e.key === "Enter") {
