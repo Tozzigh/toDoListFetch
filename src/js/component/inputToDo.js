@@ -1,24 +1,18 @@
-import React from "react";
+import React, { Component } from "react";
 import List from "./list.js";
 
 export class InputToDo extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			lista: [],
-			todoinput: ""
+			lista: []
 		};
 	}
 	render() {
 		return (
 			<div className="main">
 				<h1>todos</h1>
-				<input
-					type="text"
-					placeholder="What need to be done?"
-					onKeyPress={this.addToList}
-					onChange={e => this.setState({ todoinput: e.target.value })}
-				/>
+				<input type="text" placeholder="What need to be done?" onKeyPress={this.addToList} />
 				{this.state.lista ? (
 					<List
 						lista={this.state.lista}
@@ -31,6 +25,7 @@ export class InputToDo extends React.Component {
 			</div>
 		);
 	}
+
 	componentDidMount() {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh")
 			.then(response => response.json(), console.log("succes"))
@@ -40,33 +35,35 @@ export class InputToDo extends React.Component {
 				}
 			});
 	}
-
-	updateList(x) {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
-			method: "PUT",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify([...this.state.lista, x])
-		}).then(response => response.json());
+	componentDidUpdate() {
+		if (this.state.lista.length === 0) {
+			fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: []
+			}).then(response => response.json());
+		} else {
+			fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
+				method: "PUT",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify(this.state.lista)
+			}).then(response => response.json());
+		}
+		console.log(this.state.lista.length);
 	}
-
 	addToList = e => {
 		if (e.key === "Enter") {
 			if (e.target.value.split(" ").join("").length > 0) {
 				this.setState({ lista: [...this.state.lista, { label: e.target.value, done: false }] });
 			}
-			this.updateList({ label: e.target.value, done: false });
 			e.target.value = "";
 		}
 	};
+
 	deleteFromList = index => {
 		this.setState({
 			lista: this.state.lista.filter((item, pos) => pos !== index)
 		});
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
-			method: "PUT",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify(this.state.lista.filter((item, pos) => pos !== index))
-		}).then(response => response.json());
 	};
 
 	taskCounter = leng => {
