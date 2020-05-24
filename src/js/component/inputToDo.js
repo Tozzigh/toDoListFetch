@@ -65,7 +65,7 @@ export class InputToDo extends React.Component {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
 			method: "PUT",
 			headers: { "content-type": "application/json" },
-			body: JSON.stringify([...this.state.lista])
+			body: JSON.stringify(this.state.lista.filter((item, pos) => pos !== index))
 		}).then(response => response.json());
 	};
 
