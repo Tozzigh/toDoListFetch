@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 
 const List = ({ lista, onDeleteClicked, counter }) => {
 	const listaa = lista.map((elemento, index) => {
-		return (
-			<li className="todos" key={index}>
-				{console.log()}
-				{elemento.label}
-				<i className="delLi fa fa-times" onClick={() => onDeleteClicked(index)} />
-			</li>
-		);
+		if (elemento.done === true) {
+			return (
+				<li className="todos" key={index}>
+					{elemento.label}
+					<i className="delLi fa fa-times" onClick={() => onDeleteClicked(index)} />
+				</li>
+			);
+		}
 	});
 	return (
 		<ul>

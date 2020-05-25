@@ -13,15 +13,11 @@ export class InputToDo extends React.Component {
 			<div className="main">
 				<h1>todos</h1>
 				<input type="text" placeholder="What need to be done?" onKeyPress={this.addToList} />
-				{this.state.lista ? (
-					<List
-						lista={this.state.lista}
-						counter={this.taskCounter(this.state.lista.length)}
-						onDeleteClicked={this.deleteFromList}
-					/>
-				) : (
-					"loading..."
-				)}
+				<List
+					lista={this.state.lista}
+					counter={this.taskCounter(this.state.lista.length)}
+					onDeleteClicked={this.deleteFromList}
+				/>
 			</div>
 		);
 	}
@@ -36,25 +32,17 @@ export class InputToDo extends React.Component {
 			});
 	}
 	componentDidUpdate() {
-		if (this.state.lista.length === 0) {
-			fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
-				method: "PUT",
-				body: []
-			}).then(response => response.json());
-		} else {
-			fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
-				method: "PUT",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify(this.state.lista)
-			}).then(response => response.json());
-		}
-		console.log(this.state.lista.length);
-		console.log(this.state.lista);
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/tozzigh", {
+			method: "PUT",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify(this.state.lista)
+		});
 	}
+
 	addToList = e => {
 		if (e.key === "Enter") {
 			if (e.target.value.split(" ").join("").length > 0) {
-				this.setState({ lista: [...this.state.lista, { label: e.target.value, done: false }] });
+				this.setState({ lista: [...this.state.lista, { label: e.target.value, done: true }] });
 			}
 			e.target.value = "";
 		}
@@ -66,7 +54,8 @@ export class InputToDo extends React.Component {
 		});
 	};
 
-	taskCounter = leng => {
+	taskCounter = len => {
+		const leng = len - 1;
 		if (leng === 0) {
 			return <li className="taskCounter text-muted">No tasks, add a task</li>;
 		} else if (leng === 1) {
